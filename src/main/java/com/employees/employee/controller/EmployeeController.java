@@ -2,6 +2,8 @@ package com.employees.employee.controller;
 
 import com.employees.employee.model.Employee;
 import com.employees.employee.service.EmployeeService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,9 @@ import java.util.Optional;
 public class EmployeeController {
 
     private EmployeeService employeeService;
+
+    private static final Logger logger = LogManager.getLogger(EmployeeController.class);
+
     @Autowired
     public EmployeeController(EmployeeService employeeService){
         this.employeeService = employeeService;
@@ -36,12 +41,15 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}/pay")
     private double getEmployeePay(@PathVariable String id){
-        double salary = 0;
+        double salary = 0, tax=0;
+        String state;
         Optional<Employee> e = employeeService.findEmployeebyId(id);
         if(e.isPresent()){
             salary = e.get().getSalary();
+            tax = e.get().getTax();
         }
-        
-        return salary - (0.31*salary);
+        logger.info("Employee" + e);
+
+        return salary - (tax*salary);
     }
 }
