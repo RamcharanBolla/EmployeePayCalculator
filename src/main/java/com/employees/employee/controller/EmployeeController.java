@@ -41,15 +41,13 @@ public class EmployeeController {
 
     @GetMapping("/employees/{id}/pay")
     private double getEmployeePay(@PathVariable String id){
-        double salary = 0, tax=0;
-        String state;
+
         Optional<Employee> e = employeeService.findEmployeebyId(id);
         if(e.isPresent()){
-            salary = e.get().getSalary();
-            tax = e.get().getTax();
+            return employeeService.getEmployeePay(e);
+        }else{
+            return 0.0;
         }
-        logger.info("Employee" + e);
 
-        return salary - (tax*salary);
     }
 }

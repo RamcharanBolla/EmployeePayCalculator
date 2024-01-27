@@ -28,4 +28,11 @@ public class EmployeeService {
 
         return employeeDAO.findById(id);
     }
+
+    public double getEmployeePay(Optional<Employee> e) {
+        double salary = 0, tax=0;
+        salary = e.get().getSalary();
+        tax = e.get().getTax();
+        return salary - (tax*salary);
+    }
 }
